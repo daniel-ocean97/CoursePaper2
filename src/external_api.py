@@ -1,0 +1,2 @@
+class APIJob:
+    pass
