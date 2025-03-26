@@ -1,7 +1,7 @@
 import json
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 class FileHandler(ABC):
@@ -10,7 +10,7 @@ class FileHandler(ABC):
         pass
 
     @abstractmethod
-    def add_data(self, data: List['Vacancy']) -> None:
+    def add_data(self, data: List["Vacancy"]) -> None:
         pass
 
     @abstractmethod
@@ -36,13 +36,13 @@ class JSONFileHandler(FileHandler):
         self.__filename.touch(exist_ok=True)
 
     @staticmethod
-    def __vacancy_to_dict(vacancy: 'Vacancy') -> Dict[str, Any]:
+    def vacancy_to_dict(vacancy: "Vacancy") -> Dict[str, Any]:
         return {
             "title": vacancy.title,
             "company": vacancy.company,
             "salary_min": vacancy.salary_min,
             "salary_max": vacancy.salary_max,
-            "link": vacancy.link
+            "link": vacancy.link,
         }
 
     def get_data(self) -> List[Dict[str, Any]]:
@@ -52,20 +52,21 @@ class JSONFileHandler(FileHandler):
         except (json.JSONDecodeError, FileNotFoundError):
             return []
 
-    def __is_duplicate(self, existing_data: List[Dict[str, Any]], new_item: Dict[str, Any]) -> bool:
-        return any(item['link'] == new_item['link'] for item in existing_data)
+    def __is_duplicate(
+        self, existing_data: List[Dict[str, Any]], new_item: Dict[str, Any]
+    ) -> bool:
+        return any(item["link"] == new_item["link"] for item in existing_data)
 
-    def add_data(self, data: List['Vacancy']) -> None:
+    def add_data(self, data: List["Vacancy"]) -> None:
         # Преобразуем объекты Vacancy в словари
-        new_data = [self.__vacancy_to_dict(v) for v in data]
+        new_data = [self.vacancy_to_dict(v) for v in data]
 
         # Получаем существующие данные
         existing_data = self.get_data()
 
         # Фильтруем дубликаты
         filtered_new_data = [
-            item for item in new_data
-            if not self.__is_duplicate(existing_data, item)
+            item for item in new_data if not self.__is_duplicate(existing_data, item)
         ]
 
         # Объединяем данные
@@ -78,10 +79,10 @@ class JSONFileHandler(FileHandler):
     def delete_data(self, criteria: Dict[str, Any]) -> None:
         data = self.get_data()
         filtered_data = [
-            item for item in data
+            item
+            for item in data
             if not all(
-                str(item.get(key)) == str(value)
-                for key, value in criteria.items()
+                str(item.get(key)) == str(value) for key, value in criteria.items()
             )
         ]
 

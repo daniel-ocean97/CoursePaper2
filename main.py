@@ -2,14 +2,28 @@ from src.external_api import HHAPI
 from src.vacancies import Vacancy
 from src.work_with_files import JSONFileHandler
 
+#  Создание экземпляра класса для работы с API
 
-print("Загружаю вакансии")
 hh_api = HHAPI()
-hh_vacancies = hh_api.load_vacancies(keyword="Python")[0:100]
-print("Создаём 100 экземпляров класса Vacancy")
-vacancies_data = Vacancy.cast_to_object(hh_vacancies)
-json_file_handler = JSONFileHandler()
-print("Фильтрую по зарплате")
-vacancies_data = sorted(vacancies_data, reverse=True)
-print("Записываем их в файл")
-json_file_handler.add_data(vacancies_data)
+
+
+def user_interaction():
+    user_request = input("Введите поисковой запрос\n")
+    result = hh_api.load_vacancies(user_request)
+    result = Vacancy.cast_to_object(result)
+    sort_request = input("Отсортировать вакансии по зарплате? (от большей к меньшей)\n")
+    if sort_request.lower() == "да":
+        sorted(result, reverse=True)
+    file_request = input("Если хотите записать результат в файл напишите 'файл'\n")
+    if file_request.lower() == "файл":
+        filename = input("Укажите имя файла. (В конце обязательно '.json')\n")
+        filehandler = JSONFileHandler(filename)
+        filehandler.add_data(result)
+    else:
+        filehandler1 = JSONFileHandler()
+        for vacancy in result:
+            print(filehandler1.vacancy_to_dict(vacancy))
+
+
+if __name__ == "__main__":
+    user_interaction()

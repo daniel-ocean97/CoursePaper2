@@ -1,4 +1,5 @@
 import pytest
+
 from src.vacancies import Vacancy
 
 
@@ -20,14 +21,14 @@ def raw_api_data():
             "name": "Backend Developer",
             "employer": {"name": "Tech Corp"},
             "salary": {"from": 120000, "to": 180000},
-            "alternate_url": "https://techcorp.com/jobs/1"
+            "alternate_url": "https://techcorp.com/jobs/1",
         },
         {
             "name": "",  # Invalid title
             "employer": {"name": "Bad Company"},
             "salary": None,
-            "alternate_url": ""
-        }
+            "alternate_url": "",
+        },
     ]
 
 

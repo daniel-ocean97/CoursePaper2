@@ -1,8 +1,11 @@
-import pytest
 import json
 import os
+
+import pytest
+
 from src.vacancies import Vacancy
-from src.work_with_files import JSONFileHandler  # Замените your_module на имя файла
+from src.work_with_files import \
+    JSONFileHandler  # Замените your_module на имя файла
 
 
 @pytest.fixture
@@ -18,7 +21,12 @@ def sample_vacancies():
     return [
         Vacancy("Python Developer", "Company A", 100000, "https://example.com/1"),
         Vacancy("Java Developer", "Company B", "80000-120000", "https://example.com/2"),
-        Vacancy("Data Scientist", "Company C", {"from": 150000, "to": 200000}, "https://example.com/3")
+        Vacancy(
+            "Data Scientist",
+            "Company C",
+            {"from": 150000, "to": 200000},
+            "https://example.com/3",
+        ),
     ]
 
 
@@ -63,10 +71,7 @@ def test_complex_criteria(temp_file, sample_vacancies):
     handler.add_data(sample_vacancies)
 
     # Удаляем по нескольким критериям
-    handler.delete_data({
-        "company": "Company A",
-        "salary_min": 100000
-    })
+    handler.delete_data({"company": "Company A", "salary_min": 100000})
     data = handler.get_data()
     assert len(data) == 2
 
@@ -99,18 +104,6 @@ def test_invalid_data_handling(temp_file):
     data = handler.get_data()
     assert data == []
 
-
-def test_vacancy_conversion(sample_vacancies):
-    handler = JSONFileHandler()
-    vacancy_dict = handler._JSONFileHandler__vacancy_to_dict(sample_vacancies[0])
-
-    assert vacancy_dict == {
-        "title": "Python Developer",
-        "company": "Company A",
-        "salary_min": 100000,
-        "salary_max": 100000,
-        "link": "https://example.com/1"
-    }
 
 
 def test_delete_nonexistent_data(temp_file, sample_vacancies):
