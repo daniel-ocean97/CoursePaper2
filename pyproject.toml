@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pythonproject3"
+version = "0.1.0"
+description = ""
+authors = ["Даниил Ермилов <yndx-daniel-ocean@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pytest = "^8.3.5"
+black = "^25.1.0"
+isort = "^6.0.1"
+requests = "^2.32.3"
+pytest-mock = "^3.14.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
